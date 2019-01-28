@@ -9,6 +9,9 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class DataTransformationController {
 
@@ -75,6 +78,7 @@ public class DataTransformationController {
 			Thread t1 = new Thread(producer);
 			t1.start();
 
+			ExecutorService executor = Executors.newFixedThreadPool(5);
 			Runnable consumer = () -> {
 				try {
 					consumer(fw);
@@ -82,11 +86,14 @@ public class DataTransformationController {
 					e.printStackTrace();
 				}
 			};
-			Thread t2 = new Thread(consumer);
-			t2.start();
+			for (int i = 0; i < 10; i++) {
+	            executor.execute(consumer);
+	          }
+	        executor.shutdown();
+	        while (!executor.isTerminated()) {
 
-			t1.join();
-			t2.join();
+	        }
+
 		}
 
 		try {
