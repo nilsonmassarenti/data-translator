@@ -86,13 +86,14 @@ public class DataTransformationController {
 					e.printStackTrace();
 				}
 			};
-			for (int i = 0; i < 10; i++) {
-	            executor.execute(consumer);
-	          }
-	        executor.shutdown();
-	        while (!executor.isTerminated()) {
+			for (int i = 0; i < 5; i++) {
+				executor.execute(consumer);
+			}
+			executor.shutdown();
+			while (!executor.isTerminated()) {
 
-	        }
+			}
+			executor.shutdown();
 
 		}
 
